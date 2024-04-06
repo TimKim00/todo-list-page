@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>PlanPal</title>
+</head>
+<body class="light-theme">
+    <header>
+        <div id="header-left">
+            <button id="menu"></button>
+            <div id="logo">
+                <button id="logo"></button>
+            </div>
+        </div>
+        <div id="header-right">
+            <label id="theme-toggle">
+                <input type="checkbox" id="toggle">
+                <span class="slider round" for="toggle"></span>
+            </label>
+            <button id="settings"></button>
+            <button id="notification"></button>
+            <button id="profile"></button>
+            <button id="inbox"></button>
+            <button id="home"></button>
+        </div>
+    </header>
+    <div id="content">
+        <div class="main-ui" id="sidebar">
+        </div>
+        <div class="main-ui" id="manager">
+            <button id="sidebar-toggle"></button>
+        </div>
+    </div>
+    <script src="theme.js"></script>
+    <script src="sidebar.js"></script>
+</body>
+</html>
