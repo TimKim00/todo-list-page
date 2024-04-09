@@ -1,46 +1,98 @@
+import { createDropdown } from './utils';
+import Task from './task';
+import {projects, Project} from './project';
+import { loadProject } from './view.project';
+
 const sidebarToggle = document.querySelector('#sidebar-toggle');
 const root = document.querySelector('html');
-const sidebar_ = document.querySelector('#sidebar');
+const sidebar = document.querySelector('#sidebar');
+const dialog = document.querySelector('dialog');
 
-sidebarToggle.addEventListener('click', () => {
-    if (root.style.getPropertyValue('--sidebar-width') == "0px") {
-        root.style.setProperty('--sidebar-width', "calc(18% - 1rem)");
-        sidebarToggle.style.marginLeft = "1rem";
-        loadSidebar();
-        sidebar.style.paddingRight = "1rem";
-        setTimeout(() => {
-            sidebar.style.minWidth = "12rem";
-        }, 500);
-    } else {
-        clearSidebar();
-        root.style.setProperty('--sidebar-width', "0px");
-        sidebarToggle.style.marginLeft = "0px";
-        sidebar.style.minWidth = "0px";
-        sidebar.style.paddingRight = "0px";
-    }
-});
+export function loadSidebar() {
+    // Add Logo
+    const logo = document.createElement('div');
+    logo.id='logo';
+    const logoText = document.createTextNode("PlanPal");
+    logo.appendChild(logoText);
+    sidebar.appendChild(logo);
 
-function loadSidebar() {
+    // Add Navigations
     const nav = document.createElement('nav');
+    const body = document.querySelector('body');
 
-    nav.appendChild(createNavDiv("home", "Home"));
-    nav.appendChild(createNavDiv("task", "My task"))
-
+    nav.appendChild(createNavDiv("home", "Home", body.classList.contains('dark-theme')));
+    nav.appendChild(createNavDiv("task", "My Tasks", body.classList.contains('dark-theme')));
 
     sidebar.appendChild(nav);
+
+    // Add Projects dropdowns
+    sidebar.appendChild(createProjectDropdown());
 }
 
-function clearSidebar() {
+export function clearSidebar() {
     sidebar.innerHTML = '';
 }
 
-function createNavDiv(id, name) {
+function createNavDiv(id, name, dark) {
     const div = document.createElement('div');
     div.classList.add('nav-entry');
     const button = document.createElement('button');
     button.id = id;
+    if (dark)
+        button.classList.add('dark-theme');
     const text = document.createTextNode(name);
     div.appendChild(button);
     div.appendChild(text);
     return div;
 }
+
+function createProjectDropdown() {
+    const projectDiv = document.createElement('div');
+    projectDiv.id = 'projects';
+
+    const projectText = document.createElement('span');
+    const projectTextNode = document.createTextNode('My Project');
+    const addProjectBtn = document.createElement('button');
+    addProjectBtn.id= 'add';
+
+    addProjectBtn.addEventListener('click', () => {
+        dialog.showModal();
+    })
+
+    if (document.querySelector('#content').classList.contains('dark-theme')) {
+        addProjectBtn.classList.add('dark-theme');
+    }
+    
+    projectText.appendChild(projectTextNode);
+    projectText.appendChild(addProjectBtn);
+    projectText.id = "projects-title";
+
+    projectDiv.appendChild(projectText);
+    projectDiv.appendChild(refreshProjectDropdown());
+    return projectDiv;
+}
+
+export function refreshProjectDropdown() {
+    let dropdowns = document.querySelector('#dropdowns');
+    if (dropdowns == null) {
+        dropdowns = document.createElement('div');
+    }
+    dropdowns.id="dropdowns";
+
+    dropdowns.innerHTML = '';
+
+    projects.forEach((project) => {
+        const dropdown = createDropdown(project.getName(), project.getColor(),
+                                    project.getTasks().map(task => task.getName()),
+                                    project.getName()
+                                    )
+        dropdown.addEventListener('dblclick', () => {
+            loadProject(project.getName());
+        })
+        dropdowns.appendChild(dropdown);
+    })
+
+    return dropdowns;
+}
+
+

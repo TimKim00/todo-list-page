@@ -3,15 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>PlanPal</title>
 </head>
 <body class="light-theme">
+    <dialog autofocus>
+        <form id="add-project">
+            <span id="text">Add New Project</span>
+            <div>
+                <input type="text" name="title" id="add-proj-title" placeholder="Add Project Name" required>
+                <input type="date" name="due" id="add-proj-due" required>
+            </div>
+            <div class="colors"></div>
+            <button type="submit" id="close">Add</button>
+        </form>
+    </dialog>
     <header>
         <div id="header-left">
             <button id="menu"></button>
             <div id="logo">
                 <button id="logo"></button>
+                lanPal
             </div>
         </div>
         <div id="header-right">
@@ -29,11 +40,9 @@
     <div id="content">
         <div class="main-ui" id="sidebar">
         </div>
+        <button id="sidebar-toggle"></button>
         <div class="main-ui" id="manager">
-            <button id="sidebar-toggle"></button>
         </div>
     </div>
-    <script src="theme.js"></script>
-    <script src="sidebar.js"></script>
 </body>
 </html>
